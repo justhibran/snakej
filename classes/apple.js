@@ -28,10 +28,14 @@ class Apple {
             y: this.y + 25
         }
     }
-    gotAte(x, y) {
-        if (this.display) {
-            this.display = !(this.x == x && this.y == y);
-        }
+    gotAte() {
+           if(this.display){
+            this.display = false;
+            console.log('snake', snake.snake);
+            
+            snake.eat();
+           }
+            
     }
     draw() {
         beginShape();
@@ -40,7 +44,6 @@ class Apple {
             vertex(e.x, e.y);
         })
         endShape(CLOSE);
-        this.showCentre();
     }
     showCentre(){
         fill('white')

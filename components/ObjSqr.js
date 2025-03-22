@@ -24,13 +24,13 @@ class ObjSqr {
                 y: this.y + 50
             },
         ];
-        this.oldCentre = {
-            x: 50 - (this.x + 25),
-            y: 50 - (this.y + 25)
-        }
         this.centre = {
             x: this.x + 25,
             y: this.y + 25
+        }
+        this.oldCentre = {
+            x: this.centre.x - 50,
+            y: this.centre.x - 50
         }
     }
     update(x, y) {
@@ -43,6 +43,10 @@ class ObjSqr {
             this.centre = {
                 x: this.x + 25,
                 y: this.y + 25
+            }
+            this.oldCentre = {
+                x: this.centre.x - 50,
+                y: this.centre.x - 50
             }
             this.points = [
                 {
@@ -73,7 +77,6 @@ class ObjSqr {
             vertex(e.x, e.y);
         })
         endShape(CLOSE);
-        this.showCentre();
     }
     showCentre(){
         fill('red')

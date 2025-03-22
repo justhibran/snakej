@@ -4,7 +4,7 @@ let apple
 function setup() {
   canvas = createCanvas(500, 500);
   snake = new Snake(100, 100);
-  apple = new Apple();
+  apple = new Apple(300,300);
 }
 const sw = 50;
 let points = [
@@ -29,12 +29,13 @@ let x
 let cuadricula = 10
 let allObjects
 let collisions;
+let apples = [];
 function draw() {
-  frameRate(60);
-  background('#7bcc6e')
-  allObjects = snake.snake.concat(apple);
+  background('#7bcc6e');
+  if(apple.display)apples.push(apple);
+  else apples = [];
+  allObjects = snake.snake.concat(apples);
   collisions = collision(allObjects, snake.head.centre.x, snake.head.centre.y);
-  console.log(collisions);
   
   // drawPointsEnv();
   // drawEnvirov();
@@ -44,24 +45,29 @@ function draw() {
   };
 }
 
-function keyPressed(e) {
-  switch (key) {
-    case 's':
-      snake.update(snake.x, snake.y + 50);
-      break;
-    case 'w':
-      snake.update(snake.x, snake.y - 50);
-      break;
-    case 'd':
-      snake.update(snake.x + 50, snake.y);
-      break;
-    case 'a':
-      snake.update(snake.x - 50, snake.y);
-      break;
-
-    default:
-      break;
+async function keyPressed(e) {
+  collision(allObjects, snake.head.centre.x, snake.head.centre.y);
+  if(snake.going){
+    switch (key) {
+      case 's':
+        snake.update(snake.x, snake.y + 50);
+        break;
+      case 'w':
+        snake.update(snake.x, snake.y - 50);
+        break;
+      case 'd':
+        snake.update(snake.x + 50, snake.y);
+        break;
+      case 'a':
+        snake.update(snake.x - 50, snake.y);
+        break;
+  
+      default:
+        break;
+    }
   }
+  
+  frameRate(60);
 }
 function collision(objList, x, y) {
   if (!Array.isArray(objList)) {
@@ -75,19 +81,17 @@ function collision(objList, x, y) {
     return obj.centre.x === x && obj.centre.y === y && obj.type !== 'head';
   });
   result.map(e =>{
-    
       switch (e.type) {
         case 'apple':
-          console.log(e);
-          e.display =false;
+          e.gotAte();
           break;
           case 'body':
-            console.log(e.type);
-            e.display =false;
+            e.color = 'red';
+            snake.going = false;
             break;
             case 'tail':
-              console.log(e.type);
               e.color = 'red';
+              snake.going = false;
               break;
       
         default:
