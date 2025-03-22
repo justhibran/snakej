@@ -2,10 +2,19 @@ var canvas
 let snake
 let apple
 function setup() {
-  canvas = createCanvas(500, 500);
+  canvas = createCanvas(innerWidth/2, innerWidth/2,WEBGL);
   snake = new Snake(100, 100);
   apple = new Apple(300,300);
-  apples.push(apple)
+  apples.push(apple);   
+  // Create a p5.Camera object.
+  cam = createCamera();
+
+  // Place the camera at the top-center.
+  cam.setPosition(0, -150, 120);
+
+  // Point the camera at (10, 20, -30).
+  cam.lookAt(0, -150, 0);
+
 }
 const sw = 50;
 let points = [
@@ -31,8 +40,37 @@ let cuadricula = 10
 let allObjects
 let collisions;
 let apples = []
+let d3 = true;
 function draw() {
-  background('#7bcc6e');
+if(d3 !== false){
+  background('#141414');
+
+  ambientLight(128, 128, 128);
+  directionalLight(128, 128, 128, 0, 0, -1);
+  orbitControl()
+
+  push();
+  noStroke()
+  fill('#1f1f1f')
+  translate(0,-100,0)
+  box(100,200,30);
+  translate(0,50,30)
+  box(100,100,30);
+  translate(0,-160,-15)
+  box(100,20,60);
+  pop();
+
+  push();
+  fill('#73c769');
+  emissiveMaterial(18, 30, 9);
+  translate(0,-150,15)
+  box(100,100,2);
+  pop();
+}
+
+  push();
+  scale(.2);
+  translate(-250,-1000,81)
   apples.filter( apple => {
     if(apple.display === false){
         apples.pop();
@@ -46,8 +84,9 @@ function draw() {
   allObjects.map(e =>{
     e.draw();
   })
-  drawPointsEnv();
+  // drawPointsEnv();
   // drawEnvirov();
+  pop();
 }
 function newApple(){
   let newx = Math.floor(Math.random()*10)*50;
@@ -77,7 +116,7 @@ async function keyPressed(e) {
         break;
     }
   }
-  
+  draw()
   frameRate(60);
 }
 function collision(objList, x, y) {
