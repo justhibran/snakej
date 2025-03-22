@@ -2,7 +2,7 @@ var canvas
 let snake
 let apple
 function setup() {
-  canvas = createCanvas(innerWidth/2, innerWidth/2,WEBGL);
+  canvas = createCanvas(innerWidth, innerWidth,WEBGL);
   snake = new Snake(100, 100);
   apple = new Apple(300,300);
   apples.push(apple);   
