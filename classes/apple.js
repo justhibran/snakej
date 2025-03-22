@@ -31,8 +31,6 @@ class Apple {
     gotAte() {
            if(this.display){
             this.display = false;
-            console.log('snake', snake.snake);
-            
             snake.eat();
            }
             

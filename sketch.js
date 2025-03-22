@@ -5,6 +5,7 @@ function setup() {
   canvas = createCanvas(500, 500);
   snake = new Snake(100, 100);
   apple = new Apple(300,300);
+  apples.push(apple)
 }
 const sw = 50;
 let points = [
@@ -29,22 +30,32 @@ let x
 let cuadricula = 10
 let allObjects
 let collisions;
-let apples = [];
+let apples = []
 function draw() {
   background('#7bcc6e');
-  if(apple.display)apples.push(apple);
-  else apples = [];
+  apples.filter( apple => {
+    if(apple.display === false){
+        apples.pop();
+        let newx = Math.floor(Math.random()*10)*50;
+        let newy = Math.floor(Math.random()*10)*50;
+        apples.push(new Apple(Math.floor(Math.random()*10)*50,Math.floor(Math.random()*10)*50,true))
+    }
+  })
   allObjects = snake.snake.concat(apples);
   collisions = collision(allObjects, snake.head.centre.x, snake.head.centre.y);
-  
-  // drawPointsEnv();
+  allObjects.map(e =>{
+    e.draw();
+  })
+  drawPointsEnv();
   // drawEnvirov();
-  snake.draw(snake.x, snake.y);
-  if (apple.display) {
-    apple.draw();
-  };
 }
-
+function newApple(){
+  let newx = Math.floor(Math.random()*10)*50;
+  let newy = Math.floor(Math.random()*10)*50;
+  if(collision(allObjects,newx,newy)){
+    apples.push(new Apple(newx,newy,true));
+  }
+}
 async function keyPressed(e) {
   collision(allObjects, snake.head.centre.x, snake.head.centre.y);
   if(snake.going){
@@ -76,11 +87,12 @@ function collision(objList, x, y) {
   }
 
   const obj = objList;
-  
+  let aprove
   const result = obj.filter(obj => {
     return obj.centre.x === x && obj.centre.y === y && obj.type !== 'head';
   });
-  result.map(e =>{
+  if(result.length > 0){
+    result.map(e =>{
       switch (e.type) {
         case 'apple':
           e.gotAte();
@@ -98,6 +110,10 @@ function collision(objList, x, y) {
           break;
       }
   })
+  return false;
+  }else{
+    return true
+  }
 }
 
 function drawEnvirov() {

@@ -24,6 +24,8 @@ class Snake {
         this.snake.push(this.tail);
     }
     update(x = this.x, y = this.y) {
+        console.log(apples);
+        
         if (x >= 0 && y >= 0 && x <= 450 && y <= 450) {
             if (this.going) {
                 for (let z = 0; z < this.snake.length; z++) {
